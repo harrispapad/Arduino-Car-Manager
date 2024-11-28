@@ -2,7 +2,7 @@
 
 const int stepsPerRevolution = 200;  // change this to fit the number of steps per revolution for your motor
 
-Stepper myStepper(stepsPerRevolution, 5,6,9,10); // 9=A, 7=A', 10=B, 8=B'
+Stepper myStepper(stepsPerRevolution, 5,6,9,10); 
 
 const int alarmButton = 2;      // Alarm button
 const int rightFlashButton = 8; // Right flash button
@@ -15,10 +15,12 @@ const int leftFlashIn_1_IN3 = 5;  // Left flash pin
 const int leftFlashIn_1_IN4 = 6;  // Left flash pin
 const int ENA = 13;               // Enable pin for wiper
 
+//status flags for the buttons
 volatile bool rightFlash = false;
 volatile bool leftFlash = false;
 volatile bool alarm = false;
 
+//status flags for the lights
 volatile bool rightFlashLights = false;
 volatile bool leftFlashLights = false;
 volatile bool alarmLights = false;
@@ -59,18 +61,19 @@ void setup_interrupts()
   pinMode(rightFlashButton, INPUT_PULLUP);  // Right flash button
   pinMode(leftFlashButton, INPUT_PULLUP);   // Left flash button
 
-  PCICR |= (1 << PCIE0); // Enable PCINT for PORTB
-  PCICR |= (1 << PCIE1); // Enable PCINT for PORTC
-  PCICR |= (1 << PCIE2); // Enable PCINT for PORTD
+  PCICR |= (1 << PCIE0);                     // Enable PCINT for PORTB
+  PCICR |= (1 << PCIE1);                    // Enable PCINT for PORTC
+  PCICR |= (1 << PCIE2);                     // Enable PCINT for PORTD
 
-  PCMSK0 |= (1 << PCINT0);  // Enable interrupt for D8 (PORTB)
-  PCMSK1 |= (1 << PCINT8);  // Enable interrupt for A0 (PORTC)
-  PCMSK2 |= (1 << PCINT18); // Enable interrupt for D2 (PORTD)
+  PCMSK0 |= (1 << PCINT0);                   // Enable interrupt for D8 (PORTB)
+  PCMSK1 |= (1 << PCINT8);                   // Enable interrupt for A0 (PORTC)
+  PCMSK2 |= (1 << PCINT18);                 // Enable interrupt for D2 (PORTD)
 
   sei();
   Serial.println("Enabled Interrupts");
 }
 
+//wiper code
 void loop()
 {
   Serial.println("clockwise");
@@ -140,6 +143,7 @@ ISR(TIMER1_COMPA_vect)
   }
 }
 
+//placeholder code
 void turn_on_alarm() { Serial.println("Alarm ON"); }
 void turn_off_alarm() { Serial.println("Alarm OFF"); }
 void turn_on_right_flash() { Serial.println("Right Flash ON"); }
